@@ -1,0 +1,6 @@
+streamlit
+replicate
+pillow
+transformers
+# BERTSimilarity==0.1
+
