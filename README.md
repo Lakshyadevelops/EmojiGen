@@ -1,6 +1,4 @@
-Certainly! Below is a sample README content for your project, including instructions for setting up the interface, processing text through BERT, and generating emojis.
 
----
 
 # Emoji Finder and Generator
 
@@ -72,13 +70,17 @@ The `Next` button triggers an API call to generate the emoji. Ensure the API end
 
 ### Sample API Call
 ```python
-import requests
+import Replicate from 'replicate';
+const replicate = new Replicate();
 
-def generate_emoji(text):
-    url = 'http://your-api-endpoint/generate'
-    payload = {'text': text}
-    response = requests.post(url, json=payload)
-    return response.json()
+const input = {
+    prompt: "A TOK emoji of a man",
+    apply_watermark: false
+};
+
+const output = await replicate.run("fofr/sdxl-emoji:dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e", { input });
+console.log(output)
+//=> ["https://replicate.delivery/pbxt/a3z81v5vwlKfLq1H5uBqpVm...
 ```
 
 ## Contribution
