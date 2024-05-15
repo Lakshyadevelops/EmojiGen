@@ -19,9 +19,24 @@ st.markdown('<p class="headline">Emoji Fi-Gen</p>', unsafe_allow_html=True)
 st.markdown("""<style>.big-font {font-size:150px !important;}</style>""", unsafe_allow_html=True)
 st.markdown("""<style>.headline {text-align:center;font-size:40px}</style>""", unsafe_allow_html=True)
 
-
 container = st.container()
 container.container()
+
+def call_API():
+    output = replicate.run(
+        "fofr/sdxl-emoji:dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e",
+        input={
+            "prompt":model_prompt,
+            "height":800,
+            "width":800,
+            "negative_prompt":"worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting"
+        }
+    
+    )
+    output=output[0]
+    response=requests.get(output)
+    container.empty()
+    container.image(Image.open(BytesIO(response.content)))
 
 prompt=st.text_input("Enter emoji search string")
 prefix = "a TOK emoji of "
@@ -30,6 +45,16 @@ input = {
     "prompt":model_prompt,
     "apply_watermark":False
 }
+
+def process_words(text):
+    words = text.split(" ")
+    word_vectors = [ model.vectors_norm[model.vocab[word].index] for word in words if word in model.vocab]
+    if len(word_vectors) > 0:
+        mean_vector = np.array(word_vectors).mean(axis=0)
+        unit_vector = gensim.matutils.unitvec(mean_vector).astype(np.float32).tolist()
+    else:
+        unit_vector = np.zeros(model.vector_size, ).tolist()
+    return unit_vector
 
 
 # LOAD MODEL
@@ -41,17 +66,6 @@ def loadModel():
     print("loaded model")
     return model
 model=loadModel()
-
-
-def process_words(text):
-    words = text.split(" ")
-    word_vectors = [ model.vectors_norm[model.vocab[word].index] for word in words if word in model.vocab]
-    if len(word_vectors) > 0:
-        mean_vector = np.array(word_vectors).mean(axis=0)
-        unit_vector = gensim.matutils.unitvec(mean_vector).astype(np.float32).tolist()
-    else:
-        unit_vector = np.zeros(model.vector_size, ).tolist()
-    return unit_vector
 
 
 # CREATE DATAFRAME
@@ -72,6 +86,7 @@ def createDataFrame():
     return df
 df=createDataFrame()
 
+
 def find_similarity_to_search(search_vector):
     def func(emoji_vector):
         b_emoji = np.array(emoji_vector)
@@ -81,8 +96,6 @@ def find_similarity_to_search(search_vector):
 
 
 THRESHOLD = 0.7
-
-
 def searchEmoji(df,search_text):
     search_vector = np.array(process_words(search_text))
     similarity_search = find_similarity_to_search(search_vector)
@@ -93,39 +106,11 @@ def searchEmoji(df,search_text):
     emojiList = ""
     for emoji in x['emoji']:
         emojiList +=emoji
+    container.empty()
     container.markdown('<p class="big-font">'+emojiList+'</p>', unsafe_allow_html=True)
 
-    
-def call_API():
-    output = replicate.run(
-        "fofr/sdxl-emoji:dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e",
-        input={
-            "prompt":model_prompt,
-            "height":800,
-            "width":800,
-            "negative_prompt":"worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting"
-        }
-    
-
-    )
-    output=output[0]
-    get_prediction(output)
-
-def get_prediction(output):
-
-    print(output)
-    response=requests.get(output)
-    print(response)
-    updateContainer(Image.open(BytesIO(response.content)))
-
-def updateContainer(img):
-    container.empty()
-    container.image(img)
-
 col1, col2, col3 = st.columns([1.2, 6, 0.3])
-
 with col1:
-    
     st.button("Find Emoji",on_click=searchEmoji(df,prompt))
 
 with col2:
