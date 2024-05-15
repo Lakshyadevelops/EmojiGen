@@ -16,7 +16,8 @@ os.environ['REPLICATE_API_TOKEN'] = REPLICATE_API_TOKEN
     # st.session_state['output'] = None
 
 
-container=st.container(height=600)
+container = st.container()
+
 container.container()
 
 prompt=st.text_input("Enter emoji search string")
@@ -47,7 +48,16 @@ def get_prediction(output):
     response=requests.get(output)
     print(response)
     container.image(Image.open(BytesIO(response.content)))
-    
 
-st.button("Generate Emoji",key='generateButton',on_click=call_API)
+col1, col2, col3 = st.columns([1, 6, 0.3])
+
+with col1:
+    
+    st.button("submit",key='submit')
+
+with col2:
+    st.button("Generate Emoji",key='generateButton',on_click=call_API)
+
+
+
 

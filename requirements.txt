@@ -2,5 +2,5 @@ streamlit
 replicate
 pillow
 transformers
-# BERTSimilarity==0.1
+BERTSimilarity==0.1
 
