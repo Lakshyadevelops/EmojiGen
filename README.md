@@ -1,54 +1,61 @@
 
 
-# Emoji Finder and Generator
+# Emoji Fi-Gen
 
 ## Introduction
-This project provides an interactive interface to find and generate emojis based on input text. The interface consists of an input box for entering text and two buttons: `Submit` and `Next`. When a user submits text, the system processes it through a BERT model and calculates cosine similarity to match emojis from a predefined dataset. If matching emojis are found, the top four emojis are displayed. By clicking the `Next` button, the user can generate an emoji using an API call to a fine-tuned model on a specific emoji dataset.
+This project provides an interactive interface to find and generate emojis based on input text. The interface consists of an input box for entering text and two buttons: `Find` and `Generate`. When a user submits text, the system processes it through a BERT model and calculates cosine similarity to match emojis from a predefined dataset. If matching emojis are found, the top five emojis are displayed. By clicking the `Generate` button, the user can generate an emoji using an API call to a fine-tuned model on a specific emoji dataset.
 
 ## Features
 - **Text Input**: Input box to enter text for emoji search.
 - **Submit Button**: Processes the input text and displays matching emojis.
-- **Next Button**: Generates an emoji using a fine-tuned model via API call.
+- **Generate Button**: Generates an emoji using a fine-tuned model via API call.
 
 ## Installation
 
 ### Prerequisites
-- Python 3.8 or higher
-- Flask
-- NumPy
-- Requests
+- streamlit
+- replicate
+- pillow
+- transformers
+- gensim==3.8.3
+- emoji-data==0.1.6
+- scikit-learn==1.4.2
+- scipy==1.10.0
 
 ### Setup
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-repo/emoji-finder-generator.git
-   cd emoji-finder-generator
+   git clone https://github.com/Lakshyadevelops/EmojiGen.git
+   ```
+2. **Create a virtual environment**
+   ```bash
+   conda create -n emojigen python=3.9
+   conda activate emojigen
    ```
 
-2. **Install Dependencies**
+3. **Install Dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the Flask Application**
+4. **Run the Streamlit Application**
    ```bash
-   export FLASK_APP=app.py
-   flask run
+   streamlit run main.py
    ```
 
 ## Usage
 
 1. **Open the Application**
-   Open your web browser and go to `http://localhost:5000`.
+   Open your web browser and go to `http://localhost:8501`.
 
 2. **Input Text**
    Enter the text you want to analyze in the input box.
 
-3. **Submit Text**
-   Click the `Submit` button. The text will be processed, and the top four matching emojis will be displayed if found.
+3. **Find Text**
+   Click the `Find` button. The text will be processed, and the top four matching emojis will be displayed if found.
 
 4. **Generate Emoji**
-   Click the `Next` button to generate an emoji using the fine-tuned model via API call.
+   Click the `Generate` button to generate an emoji using the fine-tuned model via API call.
 
 ## How It Works
 
@@ -59,13 +66,13 @@ This project provides an interactive interface to find and generate emojis based
    - Cosine similarity is calculated between the text embeddings and the embeddings of emojis in the dataset.
    
 3. **Emoji Matching**
-   - The top four matching emojis based on cosine similarity are displayed.
+   - The top five matching emojis based on cosine similarity are displayed.
 
 4. **Emoji Generation**
-   - Upon clicking the `Next` button, an API call is made to a server where a fine-tuned model generates an emoji based on the input text.
+   - Upon clicking the `Generate` button, an API call is made to a server where a fine-tuned model generates an emoji based on the input text.
 
 ## API Details
-The `Next` button triggers an API call to generate the emoji. Ensure the API endpoint is correctly configured in your application.
+The `Generate` button triggers an API call to generate the emoji. Ensure the API endpoint is correctly configured in your application.
 
 ### Sample API Call
 ```python
