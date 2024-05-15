@@ -71,23 +71,6 @@ This project provides an interactive interface to find and generate emojis based
 4. **Emoji Generation**
    - Upon clicking the `Generate` button, an API call is made to a server where a fine-tuned model generates an emoji based on the input text.
 
-## API Details
-The `Generate` button triggers an API call to generate the emoji. Ensure the API endpoint is correctly configured in your application.
-
-### Sample API Call
-```python
-import Replicate from 'replicate';
-const replicate = new Replicate();
-
-const input = {
-    prompt: "A TOK emoji of a man",
-    apply_watermark: false
-};
-
-const output = await replicate.run("fofr/sdxl-emoji:dee76b5afde21b0f01ed7925f0665b7e879c50ee718c5f78a9d38e04d523cc5e", { input });
-console.log(output)
-//=> ["https://replicate.delivery/pbxt/a3z81v5vwlKfLq1H5uBqpVm...
-```
 
 ## Contribution
 Feel free to fork this repository and contribute by submitting a pull request.
