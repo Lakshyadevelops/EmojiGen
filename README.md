@@ -15,7 +15,6 @@ This project provides an interactive interface to find and generate emojis based
 ### Prerequisites
 - Python 3.8 or higher
 - Flask
-- Transformers (HuggingFace)
 - NumPy
 - Requests
 
