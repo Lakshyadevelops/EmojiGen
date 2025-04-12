@@ -2,7 +2,7 @@ streamlit
 replicate
 pillow
 transformers
-gensim==3.8.3
+gensim==3.4.3
 emoji-data==0.1.6
 scikit-learn==1.4.2
 scipy==1.10.0
